@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/irnak4t/lb-api/db/mysql"
 	"github.com/irnak4t/lb-api/models"
+	"github.com/irnak4t/leaderboards/db/mysql"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -21,7 +21,7 @@ func main() {
 }
 
 func getRuns(c echo.Context) error {
-	db, _ := mysql.Open()
+	db := mysql.Open()
 	defer db.Close()
 
 	var records []models.Record
