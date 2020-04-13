@@ -2,16 +2,16 @@ package config
 
 import (
 	"os"
-	"path/filepath"
 
 	"github.com/BurntSushi/toml"
+	"github.com/irnak4t/leaderboards/errors"
 )
 
 type Config struct {
-	Db DbConfig `toml:"mysql"`
+	MySQL MySQLConfig `toml:"mysql"`
 }
 
-type DbConfig struct {
+type MySQLConfig struct {
 	Database string `toml:"database"`
 	User     string `toml:"user"`
 	Password string `toml:"password"`
@@ -20,13 +20,12 @@ type DbConfig struct {
 var config Config
 
 func LoadToml() {
-	exe, _ := os.Executable()
-
-	dir := filepath.Dir(exe)
-	_, _ = toml.DecodeFile(dir+"/db/db.toml", &config)
+	cfgdir, err := os.UserConfigDir()
+	_, err = toml.DecodeFile(cfgdir+"/lb.db.toml", &config)
+	errors.FailOnError(err)
 }
 
-func Get() Config {
+func GetMySQLConfig() MySQLConfig {
 	LoadToml()
-	return config
+	return config.MySQL
 }
