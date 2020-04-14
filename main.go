@@ -9,14 +9,25 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func main() {
-	e := echo.New()
+var e *echo.Echo
 
+func main() {
+	echoInit()
+	echoRouting()
+	echoRun()
+}
+
+func echoInit() {
+	e = echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+}
 
+func echoRouting() {
 	e.GET("/:runner", getRuns)
+}
 
+func echoRun() {
 	e.Logger.Fatal(e.Start(":3000"))
 }
 
